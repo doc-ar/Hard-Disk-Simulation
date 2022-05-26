@@ -75,11 +75,22 @@ class HddSimulation
     private:
         fileAllocation FAT[totalFiles];
         storage Disk[diskSize];
-        int p1end;
-        int p2end;
+        int p1End;
+        int p2End;
+        int p1Count;
+        int p2Count;
 
     public:
-        HddSimulation(int p1Size, int p2Size)
+        HddSimulation(int p1End, int p2End)
+        {
+            this->p1End = p1End;
+            this->p2End = p2End;
+            p1Count = 0;
+            p2Count = 0;
+            this->format();
+        }
+
+        void format()
         {
             for(int i=0; i<totalFiles; i++)
             {
@@ -90,6 +101,11 @@ class HddSimulation
             {
                 Disk[i].nextIndex = -1;
             }
+
+            // Partition End Codes
+            Disk[p1End].nextIndex = -3;
+            Disk[p2End].nextIndex = -3;
+            Disk[diskSize-1].nextIndex = -3;
         }
 };
 
@@ -101,6 +117,7 @@ int main()
     int opt = 0;    // Option Selection Sentry
     int p1End = 0;  // Partition 1 End
     int p2End = 0;  // Partition 2 End
+    File tp;
 
     cout << " --------------------------------" << endl;
     cout << " Welcome to Hard Drive Simulation" << endl;
@@ -131,6 +148,7 @@ int main()
         }
     }
 
+    HddSimulation drive(p1End, p2End);
     while(opt != 6)
     {
         cout << "\n\n\n Please select an option";
@@ -142,6 +160,27 @@ int main()
         cout << "\n 6: Exit Program";
         cout << "\n\n Enter Option: ";
         cin >> opt;
+
+        if(opt == 1)
+        {
+            File temp;
+            int opt2 = 0;
+
+            cout << "\n\n\n\t Please Enter File Name: ";
+            temp.getName();
+            cout << "\t Please Enter File Extension: ";
+            temp.getExt();
+            cout << "\t File Data: ";
+            temp.getData();
+
+            while(opt!=3)
+            {
+                cout << "\n\n\t\t Please Enter which partition to store file";
+                cout << "\n\t\t 1: Drive C";
+                cout << "\n\t\t 2: Drive D";
+                cout << "\n\t\t 3: Cancel Operation";
+            }
+        }
     }
     return 0;
 }
